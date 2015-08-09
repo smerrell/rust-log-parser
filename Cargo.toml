@@ -5,3 +5,4 @@ authors = ["Sam Merrell <merrell.sam@gmail.com>"]
 
 [dependencies]
 argparse = "*"
+regex = "*"
