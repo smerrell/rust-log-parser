@@ -44,6 +44,24 @@ fn parse_arguments() -> Options {
     options
 }
 
+// turn this essentially into a grok-lite project so I could give a pattern something like
+// %{DATETIME: date} %{WORD:someword} - %{WORD:anotherword}
+// and we turn that into a regex basically like this:
+// (?P<date>\d{4}-\d{2}-\d{2}) (?P<someword>\w+) - (?P<anotherword>w*)
+// The above example would be using a PATTERNS FILE somewhere to do that
+// OR
+// You could just pass in straight regex.
+// Then we turn this into a structure somehow... not sure how yet
+// Then we can spit the data out in a JSON format
+// something like:
+// {
+//   "date": "2015-04-01",
+//   "someword": "match",
+//   "anotherword": "another match"
+// }
+//
+// Basically a more dynamic version of the log scraper I wrote earlier
+
 fn main() {
     let options = parse_arguments();
     if options.verbose {
@@ -72,3 +90,4 @@ fn main() {
         }
     }
 }
+
