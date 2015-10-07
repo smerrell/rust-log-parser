@@ -19,8 +19,11 @@ impl Matcher {
     fn match_line(&self, line: &str) -> HashMap<String, String> {
         let mut map = HashMap::new();
         self.regex.captures(&line).map(|cap| {
-            for group in cap.iter_named() {
-                map.insert(group.0.to_owned(), group.1.unwrap_or("").to_owned());
+            let iter = cap.iter_named()
+                .filter(|&(_, value)| { value.is_some() });
+
+            for group in iter {
+                map.insert(group.0.to_owned(), group.1.unwrap().to_owned());
             }
         });
 
@@ -50,5 +53,15 @@ mod tests {
         let line = "Ms. Person".to_string();
         let re_map = matcher.match_line(&line);
         assert!(re_map.contains_key("title"));
+    }
+
+    #[test]
+    pub fn create_hash_map_of_groups_in_regex_that_match() {
+        let re = Regex::new(r"(?P<title>\w+\.) (?P<first>\w+) (?P<last>\w+)(?P<suffix>\w+)?").unwrap();
+        let matcher = Matcher::new(re);
+
+        let line = "Ms. Person WithoutSuffix".to_string();
+        let re_map = matcher.match_line(&line);
+        assert_eq!(re_map.get("suffix"), None);
     }
 }
