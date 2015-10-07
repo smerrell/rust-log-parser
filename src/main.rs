@@ -7,6 +7,8 @@ use std::fs::File;
 use argparse::{ArgumentParser, StoreTrue, Store};
 use regex::Regex;
 
+mod matcher;
+
 struct Options {
     verbose: bool,
     case_insensitive: bool,
@@ -90,4 +92,3 @@ fn main() {
         }
     }
 }
-
