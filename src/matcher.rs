@@ -16,20 +16,13 @@ impl Matcher {
         }
     }
 
-    fn match_line<'a>(&'a self, line: &'a str) -> HashMap<&str, &str> {
-        println!("match_line");
+    fn match_line(&self, line: &str) -> HashMap<String, String> {
         let mut map = HashMap::new();
-        match self.regex.captures(&line) {
-            Some(c) => {
-                for i in c.iter_named() {
-                    println!("{}", i.0);
-                    println!("{}", i.1.unwrap());
-
-                    //map.insert(i.0, i.1.unwrap());
-                }
-            },
-            None => {}
-        }
+        self.regex.captures(&line).map(|cap| {
+            for group in cap.iter_named() {
+                map.insert(group.0.to_owned(), group.1.unwrap_or("").to_owned());
+            }
+        });
 
         map
     }
